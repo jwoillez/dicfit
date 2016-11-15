@@ -19,7 +19,7 @@ def _dict(keys, values):
 
 
 def _wrapper(func):
-    return lambda params, keys, fixed, data: func(*data, **fixed, **_dict(keys, params))
+    return lambda params, keys, fixed, data: func(*data, **fixed, **_dict(keys, params)).flatten()
 
 
 def fix(dict_params, fixed_key):
