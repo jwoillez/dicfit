@@ -23,16 +23,20 @@ def _wrapper(func):
 
 
 def fix(dict_params, fixed_key):
-    if isinstance(dict_params, OrderedDict):
-        list_params = []
-        while dict_params:
-            list_params.append(dict_params.popitem(last=False))
-            if list_params[-1][0] == fixed_key:
-                list_params[-1] = ('@'+fixed_key, list_params[-1][1])
-        for key, value in list_params:
-            dict_params[key] = value
-    else:
-        dict_params['@'+fixed_key] = dict_params.pop(fixed_key)
+    if '@'+fixed_key not in dict_params.keys():
+        if fixed_key in dict_params.keys():
+            if isinstance(dict_params, OrderedDict):
+                list_params = []
+                while dict_params:
+                    list_params.append(dict_params.popitem(last=False))
+                    if list_params[-1][0] == fixed_key:
+                        list_params[-1] = ('@'+fixed_key, list_params[-1][1])
+                for key, value in list_params:
+                    dict_params[key] = value
+            else:
+                dict_params['@'+fixed_key] = dict_params.pop(fixed_key)
+        else:
+            raise Exception('"{0}" not found in dictionary!'.format(fixed_key))
 
 
 def leastsq(func, dict_params, args=()):
