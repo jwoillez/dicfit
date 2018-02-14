@@ -1,5 +1,5 @@
 # dicfit
-A dictionary-based fitting package.
+A dictionary-based fitting package, supporting scalar and list parameters.
 
 ## Requirements
 
