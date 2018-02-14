@@ -3,16 +3,16 @@ from collections import OrderedDict, Iterable
 
 
 def _dict(keys, values):
-    """Convert to a dictionary, with duplicate keys accumulated into a list.
+    """Convert to a dictionary, where duplicate keys appended with a '+' are accumulated into a list.
 
-    _dict(['A', 'A', 'B'], [0.0, 1.0, 2.0]) -> {'A': [0.0, 1.0], 'B': 2.0}
+    _dict(['A+', 'A+', 'B+', 'C'], [0.0, 1.0, 2.0, 3.0]) -> {'A': [0.0, 1.0], 'B': [2.0], 'C': 3.0}
     """
     result = {}
     for key, value in zip(keys, values):
-        if key in result:
-            if not isinstance(result[key], list):
-                result[key] = [result[key]]
-            result[key].append(value)
+        if key.strip('+') in result:
+            result[key.strip('+')].append(value)
+        elif key[-1]=='+':
+            result[key.strip('+')] = [value]
         else:
             result[key] = value
     return result
@@ -57,7 +57,7 @@ def leastsq(func, dict_params, args=()):
         else:
             if isinstance(value, Iterable):
                 params.extend(value)
-                keys.extend([key]*len(value))
+                keys.extend([key+'+']*len(value))
             else:
                 params.append(value)
                 keys.append(key)
